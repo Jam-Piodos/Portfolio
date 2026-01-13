@@ -216,3 +216,223 @@ footer {
 audio {
     display: none;
 }
+
+/* Game-inspired Character Profile Styles */
+.character-profile {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 3px solid #ff6b9d;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(255, 107, 157, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ff6b9d;
+}
+
+.profile-header h2 {
+    color: #ff6b9d;
+    font-size: 2.5em;
+    text-shadow: 0 0 10px rgba(255, 107, 157, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.profile-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.character-portrait {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.character-img {
+    width: 250px;
+    height: 300px;
+    object-fit: cover;
+    border: 4px solid #ff6b9d;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 107, 157, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    background: #0f0f1e;
+    padding: 5px;
+}
+
+.level-badge {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.character-stats {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-left: 4px solid #ff6b9d;
+    border-radius: 5px;
+}
+
+.stat-label {
+    color: #ff6b9d;
+    font-weight: bold;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(255, 107, 157, 0.5);
+}
+
+.stat-value {
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.stat-value a {
+    color: #ffb6c1;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.stat-value a:hover {
+    color: #ff6b9d;
+    text-shadow: 0 0 8px rgba(255, 107, 157, 0.8);
+}
+
+.stat-bar-section {
+    margin-top: 10px;
+}
+
+.stat-bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #ff6b9d;
+    font-weight: bold;
+    font-size: 0.95em;
+    letter-spacing: 1px;
+}
+
+.stat-numbers {
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.stat-bar {
+    width: 100%;
+    height: 25px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #ff6b9d;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.5s ease;
+    position: relative;
+    box-shadow: 0 0 10px rgba(255, 107, 157, 0.6);
+}
+
+.hp-bar {
+    background: linear-gradient(90deg, #ff4757 0%, #ff6b9d 100%);
+}
+
+.xp-bar {
+    background: linear-gradient(90deg, #5f27cd 0%, #a55eea 100%);
+}
+
+.skills-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid #ff6b9d;
+    border-radius: 10px;
+}
+
+.skills-header {
+    color: #ff6b9d;
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    text-align: center;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(255, 107, 157, 0.6);
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.skill-item {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(196, 69, 105, 0.2) 100%);
+    border: 2px solid #ff6b9d;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.95em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.skill-item:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.4) 0%, rgba(196, 69, 105, 0.4) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 107, 157, 0.5);
+}
+
+/* Responsive design for character profile */
+@media (max-width: 768px) {
+    .profile-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .character-img {
+        width: 200px;
+        height: 250px;
+    }
+    
+    .profile-header h2 {
+        font-size: 1.8em;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+}
