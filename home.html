@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio ni Piodos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <audio controls autoplay style="display: none;">
+        <source src="freakyou.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <header>
+        <div class="container">
+            <h1>Portfolio ni Piodos</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="navigateTo('home')">Home</a></li>
+                <li><a href="#" onclick="navigateTo('about')">About</a></li>
+                <li><a href="#" onclick="navigateTo('resume')">Resume</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Projects</a>
+                    <ul class="dropdown-content">
+                        <li><a href="#" onclick="navigateTo('projects')">Object Oriented Programming</a></li>
+                        <li><a href="#" onclick="navigateTo('repositories')">Event-Driven Repositories</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <main id="home" class="container">
+        <h2>Welcome sa Portfolio ni Piodos!</h2>
+        <p>"Giving up is Gay, So just give up"</p>
+        <img class="pic" src="https://media.tenor.com/85nhgQi93A8AAAAC/sleepy-anime.gif" alt="gay.gif">
+    </main>
+
+    <main id="about" class="container" style="display: none;">
+        <h2 class="container">About Me</h2>
+        <br><br><br>
+        <img class="pic" src="jam.jpg" alt="jam.jpg">
+        <h5>Name: Jam Piodos</h5>
+        <h5>HP: 32/102</h5>
+        <h5>XP: 50/365</h5>
+        <br>
+        <h5>Race: Human</h5>
+        <h5>Class: IT Student</h5>
+        <h5>Age: 20</h5>
+        <h5>GitHub Codename: <a href="https://github.com/PinkyBabe">PinkyBabe</a></h5>
+        <br>
+        <h3>Skills:</h3>
+        <br>
+        <h5>"Encapsulation</5>
+            <h5>"Inheritace"</h5>
+            <h5>"Polymorphism"</h5>
+            <h5>"Abstraction"</h5>
+            <h5>"Bubble Sorting"</h5>
+    </main>
+    <main id="resume" class="container">
+        <img class="pic3" src="2.jpg" alt="resume.jpg">
+    </main>
+
+    <main id="projects" class="container" style="display: none;">
+        <h2>Object Oriented Programming Projects</h2>
+        <br><br>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Abstraction">Abstraction</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/ArraySort">ArraySort</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/BankAccount">BankAccount</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Color">Color</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Drinks">Drinks</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Encapsulation">Encapsulation</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Inheritance">Inheritance</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Lamp%20and%20Student(Lab%20Exercise%201)">Lamp and Student(Lab Excercise 1)</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Person">Person</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/Polymorphism">Polymorphism</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/StudentProfile">Student Profile</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/bubblebutt">Bubble Sort</a></h3>
+        </div>
+        <div class="project">
+            <img src="file.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project/tree/main/src/sampleproject">Sample Project</a></h3>
+        </div>
+    </main>
+    <main id="repositories" class="container">
+        <div class="container">
+            <h2>Repositories</h2>
+        </div>
+
+        <br><br>
+
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT21C-Project">IT21C-Project</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/inheritance">Inheritance</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/Lab-Exercises">Lab Exercises</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT24-assessment">IT24C-Assessment</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT24C-branches">IT24C-Branches</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/Wala-Lang">Random Resources</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/IT24C-Student-s_Profile">IT24C-Student-s_Profile</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/it24c">First File via Local Repo</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/Piodos.Jam---IT24C">First File via Web</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/SinglePage">Single Page Application</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/it24-main">it24-main (forked)</a></h3>
+        </div>
+    
+        <div class="project">
+            <img src="repo.jpg" alt="Project Icon">
+            <h3><a href="https://github.com/PinkyBabe/spa-jquery">Spa-jquery</a></h3>
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+<footer>
+        <div>
+            <p>&copy; 2023 Jam Piodos. All rights reserved.</p>
+        </div>
+</footer>
+
+</html>
