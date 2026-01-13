@@ -94,6 +94,69 @@ nav a:hover {
 
 .pic {
     height: 500px;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Home section two-column layout */
+.home-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    text-align: left;
+}
+
+.home-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-text {
+    flex: 1;
+    padding: 20px;
+}
+
+.home-text h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2em;
+    text-align: left;
+}
+
+.home-text p {
+    font-size: 1.1em;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+    margin: 0;
+}
+
+/* Responsive design for home section */
+@media (max-width: 768px) {
+    .home-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .home-text {
+        text-align: center;
+    }
+    
+    .home-text h2 {
+        text-align: center;
+    }
+    
+    .home-text p {
+        text-align: center;
+    }
+    
+    .pic {
+        height: auto;
+        max-height: 400px;
+    }
 }
 
 main {
@@ -102,6 +165,11 @@ main {
     margin-top: 20px;
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Override container text-align for home section */
+#home.container {
+    text-align: left;
 }
 
 .project {
@@ -133,4 +201,14 @@ footer {
 .pic3 {
     width: 800px;
     height: auto;
+}
+
+/* Hidden sections - initially hidden, shown via JavaScript */
+.hidden {
+    display: none;
+}
+
+/* Audio element styling */
+audio {
+    display: none;
 }

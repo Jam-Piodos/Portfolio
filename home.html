@@ -10,8 +10,8 @@
 
 <body>
 
-    <audio controls autoplay style="display: none;">
-        <source src="freakyou.mp3" type="audio/mpeg">
+    <audio controls autoplay>
+        <source src="videoplayback.m4a" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -21,14 +21,14 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#" onclick="navigateTo('home')">Home</a></li>
-                <li><a href="#" onclick="navigateTo('about')">About</a></li>
-                <li><a href="#" onclick="navigateTo('resume')">Resume</a></li>
+                <li><a href="#" data-page="home">Home</a></li>
+                <li><a href="#" data-page="about">About</a></li>
+                <li><a href="#" data-page="resume">Resume</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Projects</a>
                     <ul class="dropdown-content">
-                        <li><a href="#" onclick="navigateTo('projects')">Object Oriented Programming</a></li>
-                        <li><a href="#" onclick="navigateTo('repositories')">Event-Driven Repositories</a></li>
+                        <li><a href="#" data-page="projects">Object Oriented Programming</a></li>
+                        <li><a href="#" data-page="repositories">Event-Driven Repositories</a></li>
                     </ul>
                 </li>
             </ul>
@@ -37,12 +37,18 @@
     </header>
 
     <main id="home" class="container">
-        <h2>Welcome sa Portfolio ni Piodos!</h2>
-        <p>"Giving up is Gay, So just give up"</p>
-        <img class="pic" src="https://media.tenor.com/85nhgQi93A8AAAAC/sleepy-anime.gif" alt="gay.gif">
+        <div class="home-content">
+            <div class="home-image">
+                <img class="pic" src="https://media.tenor.com/mtiOW6O-k8YAAAAM/shrek-shrek-rizz.gif" alt="Portfolio Image">
+            </div>
+            <div class="home-text">
+                <h2>Welcome to My Portfolio</h2>
+                <p>This portfolio presents my personal experiences as an Information Technology student at NBSC. It includes academic and project-based works, hands-on experiences, and selected projects published on my GitHub repository. The portfolio also contains my basic personal information to provide a complete overview of my background, skills, and development as an IT student.</p>
+            </div>
+        </div>
     </main>
 
-    <main id="about" class="container" style="display: none;">
+    <main id="about" class="container hidden">
         <h2 class="container">About Me</h2>
         <br><br><br>
         <img class="pic" src="jam.jpg" alt="jam.jpg">
@@ -67,7 +73,7 @@
         <img class="pic3" src="2.jpg" alt="resume.jpg">
     </main>
 
-    <main id="projects" class="container" style="display: none;">
+    <main id="projects" class="container hidden">
         <h2>Object Oriented Programming Projects</h2>
         <br><br>
         <div class="project">
