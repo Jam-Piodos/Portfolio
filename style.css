@@ -178,7 +178,124 @@ main {
 
 .project {
     margin-bottom: 20px;
+}
 
+/* Repository Section Styles */
+.repo-section-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid rgba(255, 107, 157, 0.3);
+}
+
+.repo-section-header h2 {
+    color: #333;
+    font-size: 2.5em;
+    margin: 0 0 10px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.repo-account-link {
+    color: #666;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+.repo-account-link a {
+    color: #ff6b9d;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.repo-account-link a:hover {
+    color: #c44569;
+    text-decoration: underline;
+}
+
+.repos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px 0;
+}
+
+.repo-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 240, 245, 0.9) 100%);
+    border: 2px solid #ff6b9d;
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 180px;
+    justify-content: space-between;
+}
+
+.repo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+    border-color: #c44569;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 240, 245, 1) 100%);
+}
+
+.repo-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.repo-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.3em;
+}
+
+.repo-card h3 a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+    word-break: break-word;
+}
+
+.repo-card h3 a:hover {
+    color: #ff6b9d;
+    text-shadow: 0 0 5px rgba(255, 107, 157, 0.3);
+}
+
+.repo-description {
+    color: #666;
+    font-size: 0.95em;
+    margin: 0;
+    line-height: 1.5;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* Override container text-align for repo sections */
+#projects.container,
+#repositories.container {
+    text-align: left;
+}
+
+/* Responsive design for repos */
+@media (max-width: 768px) {
+    .repos-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .repo-section-header h2 {
+        font-size: 2em;
+    }
+    
+    .repo-card {
+        min-height: 160px;
+        padding: 20px;
+    }
 }
 
 @media (max-width: 768px) {
