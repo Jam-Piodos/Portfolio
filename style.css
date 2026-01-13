@@ -523,11 +523,17 @@ footer {
     cursor: grab;
     user-select: none;
     -webkit-user-drag: none;
+    transform-origin: center center;
+    will-change: transform;
 }
 
 .resume-modal-content.dragging {
     cursor: grabbing;
     transition: none;
+}
+
+.resume-modal-content:active {
+    cursor: grabbing;
 }
 
 .resume-modal-close {

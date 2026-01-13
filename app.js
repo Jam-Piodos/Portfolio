@@ -186,26 +186,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const maxZoom = 3;
     const zoomStep = 0.2;
     let isDragging = false;
-    let startX, startY, scrollLeft, scrollTop;
+    let startX, startY;
+    let translateX = 0;
+    let translateY = 0;
+    let lastTranslateX = 0;
+    let lastTranslateY = 0;
     
-    // Open modal when resume image is clicked
-    if (resumeImage && resumeModal && modalImg) {
-        resumeImage.addEventListener('click', function() {
-            resumeModal.classList.add('active');
-            currentZoom = 1;
-            modalImg.style.transform = `scale(${currentZoom})`;
-            modalImg.style.cursor = 'grab';
-            // Reset scroll position
-            resumeModal.scrollTop = 0;
-            resumeModal.scrollLeft = 0;
-        });
+        // Open modal when resume image is clicked
+        if (resumeImage && resumeModal && modalImg) {
+            resumeImage.addEventListener('click', function() {
+                resumeModal.classList.add('active');
+                currentZoom = 1;
+                translateX = 0;
+                translateY = 0;
+                lastTranslateX = 0;
+                lastTranslateY = 0;
+                updateImageTransform();
+                modalImg.style.cursor = 'grab';
+                // Reset scroll position
+                resumeModal.scrollTop = 0;
+                resumeModal.scrollLeft = 0;
+            });
+            
+            // Function to update image transform
+            function updateImageTransform() {
+                modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+            }
         
         // Close modal
         if (closeModal) {
             closeModal.addEventListener('click', function() {
                 resumeModal.classList.remove('active');
                 currentZoom = 1;
-                modalImg.style.transform = `scale(${currentZoom})`;
+                translateX = 0;
+                translateY = 0;
+                lastTranslateX = 0;
+                lastTranslateY = 0;
+                updateImageTransform();
                 modalImg.classList.remove('dragging');
                 isDragging = false;
             });
@@ -216,7 +233,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.target === resumeModal || e.target.classList.contains('resume-modal-wrapper')) {
                 resumeModal.classList.remove('active');
                 currentZoom = 1;
-                modalImg.style.transform = `scale(${currentZoom})`;
+                translateX = 0;
+                translateY = 0;
+                lastTranslateX = 0;
+                lastTranslateY = 0;
+                updateImageTransform();
                 modalImg.classList.remove('dragging');
                 isDragging = false;
             }
@@ -227,39 +248,64 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.key === 'Escape' && resumeModal.classList.contains('active')) {
                 resumeModal.classList.remove('active');
                 currentZoom = 1;
-                modalImg.style.transform = `scale(${currentZoom})`;
+                translateX = 0;
+                translateY = 0;
+                lastTranslateX = 0;
+                lastTranslateY = 0;
+                updateImageTransform();
                 modalImg.classList.remove('dragging');
                 isDragging = false;
             }
         });
         
-        // Drag to pan functionality
+        // Enhanced drag to pan functionality with mouse
         modalImg.addEventListener('mousedown', function(e) {
             if (currentZoom > 1) {
                 isDragging = true;
                 modalImg.classList.add('dragging');
-                startX = e.pageX - modalImg.offsetLeft;
-                startY = e.pageY - modalImg.offsetTop;
-                scrollLeft = resumeModal.scrollLeft;
-                scrollTop = resumeModal.scrollTop;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
                 e.preventDefault();
+                e.stopPropagation();
             }
         });
         
         document.addEventListener('mousemove', function(e) {
             if (!isDragging) return;
             e.preventDefault();
-            const x = e.pageX - startX;
-            const y = e.pageY - startY;
-            resumeModal.scrollLeft = scrollLeft - (x - (e.pageX - resumeModal.offsetLeft - startX));
-            resumeModal.scrollTop = scrollTop - (y - (e.pageY - resumeModal.offsetTop - startY));
+            e.stopPropagation();
+            
+            // Calculate new translate values
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            
+            // Constrain panning to image bounds when zoomed
+            const imgRect = modalImg.getBoundingClientRect();
+            const modalRect = resumeModal.getBoundingClientRect();
+            const scaledWidth = imgRect.width / currentZoom;
+            const scaledHeight = imgRect.height / currentZoom;
+            
+            const maxTranslateX = (scaledWidth * currentZoom - scaledWidth) / 2;
+            const maxTranslateY = (scaledHeight * currentZoom - scaledHeight) / 2;
+            
+            translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
+            translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
+            
+            updateImageTransform();
         });
         
         document.addEventListener('mouseup', function() {
             if (isDragging) {
                 isDragging = false;
                 modalImg.classList.remove('dragging');
+                lastTranslateX = translateX;
+                lastTranslateY = translateY;
             }
+        });
+        
+        // Prevent image drag (browser default)
+        modalImg.addEventListener('dragstart', function(e) {
+            e.preventDefault();
         });
         
         // Touch support for mobile
@@ -295,8 +341,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.stopPropagation();
                 if (currentZoom < maxZoom) {
                     currentZoom = Math.min(currentZoom + zoomStep, maxZoom);
-                    modalImg.style.transform = `scale(${currentZoom})`;
-                    // Enable scrolling when zoomed
+                    // Reset translate when zooming in/out to center
+                    if (currentZoom <= 1) {
+                        translateX = 0;
+                        translateY = 0;
+                    }
+                    updateImageTransform();
+                    // Enable cursor when zoomed
                     if (currentZoom > 1) {
                         modalImg.style.cursor = 'grab';
                     }
@@ -310,10 +361,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.stopPropagation();
                 if (currentZoom > minZoom) {
                     currentZoom = Math.max(currentZoom - zoomStep, minZoom);
-                    modalImg.style.transform = `scale(${currentZoom})`;
+                    // Reset translate when zoomed out
                     if (currentZoom <= 1) {
+                        translateX = 0;
+                        translateY = 0;
                         modalImg.style.cursor = 'default';
-                        // Reset scroll position when zoomed out
+                    }
+                    updateImageTransform();
+                    // Reset scroll position when zoomed out
+                    if (currentZoom <= 1) {
                         resumeModal.scrollTop = 0;
                         resumeModal.scrollLeft = 0;
                     }
@@ -326,7 +382,11 @@ document.addEventListener('DOMContentLoaded', function() {
             zoomResetBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 currentZoom = 1;
-                modalImg.style.transform = `scale(${currentZoom})`;
+                translateX = 0;
+                translateY = 0;
+                lastTranslateX = 0;
+                lastTranslateY = 0;
+                updateImageTransform();
                 modalImg.style.cursor = 'default';
                 // Reset scroll position
                 resumeModal.scrollTop = 0;
@@ -342,12 +402,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     e.preventDefault();
                     const delta = e.deltaY > 0 ? -zoomStep : zoomStep;
                     currentZoom = Math.max(minZoom, Math.min(maxZoom, currentZoom + delta));
-                    modalImg.style.transform = `scale(${currentZoom})`;
-                    if (currentZoom > 1) {
-                        modalImg.style.cursor = 'grab';
-                    } else {
+                    
+                    // Reset translate when zooming to 1x or below
+                    if (currentZoom <= 1) {
+                        translateX = 0;
+                        translateY = 0;
                         modalImg.style.cursor = 'default';
+                    } else {
+                        modalImg.style.cursor = 'grab';
                     }
+                    updateImageTransform();
                 }
                 // Otherwise, allow normal scrolling
             }
