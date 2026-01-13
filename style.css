@@ -38,6 +38,10 @@ header p {
     font-size: 18px;
 }
 
+nav {
+    padding-left: 40px;
+}
+
 nav ul {
     list-style-type: none;
     margin: 0;
