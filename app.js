@@ -171,4 +171,186 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    
+    // Resume Modal Functionality
+    const resumeImage = document.getElementById('resume-image');
+    const resumeModal = document.getElementById('resume-modal');
+    const modalImg = document.getElementById('resume-modal-img');
+    const closeModal = document.querySelector('.resume-modal-close');
+    const zoomInBtn = document.getElementById('zoom-in');
+    const zoomOutBtn = document.getElementById('zoom-out');
+    const zoomResetBtn = document.getElementById('zoom-reset');
+    
+    let currentZoom = 1;
+    const minZoom = 0.5;
+    const maxZoom = 3;
+    const zoomStep = 0.2;
+    let isDragging = false;
+    let startX, startY, scrollLeft, scrollTop;
+    
+    // Open modal when resume image is clicked
+    if (resumeImage && resumeModal && modalImg) {
+        resumeImage.addEventListener('click', function() {
+            resumeModal.classList.add('active');
+            currentZoom = 1;
+            modalImg.style.transform = `scale(${currentZoom})`;
+            modalImg.style.cursor = 'grab';
+            // Reset scroll position
+            resumeModal.scrollTop = 0;
+            resumeModal.scrollLeft = 0;
+        });
+        
+        // Close modal
+        if (closeModal) {
+            closeModal.addEventListener('click', function() {
+                resumeModal.classList.remove('active');
+                currentZoom = 1;
+                modalImg.style.transform = `scale(${currentZoom})`;
+                modalImg.classList.remove('dragging');
+                isDragging = false;
+            });
+        }
+        
+        // Close modal when clicking outside the image
+        resumeModal.addEventListener('click', function(e) {
+            if (e.target === resumeModal || e.target.classList.contains('resume-modal-wrapper')) {
+                resumeModal.classList.remove('active');
+                currentZoom = 1;
+                modalImg.style.transform = `scale(${currentZoom})`;
+                modalImg.classList.remove('dragging');
+                isDragging = false;
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && resumeModal.classList.contains('active')) {
+                resumeModal.classList.remove('active');
+                currentZoom = 1;
+                modalImg.style.transform = `scale(${currentZoom})`;
+                modalImg.classList.remove('dragging');
+                isDragging = false;
+            }
+        });
+        
+        // Drag to pan functionality
+        modalImg.addEventListener('mousedown', function(e) {
+            if (currentZoom > 1) {
+                isDragging = true;
+                modalImg.classList.add('dragging');
+                startX = e.pageX - modalImg.offsetLeft;
+                startY = e.pageY - modalImg.offsetTop;
+                scrollLeft = resumeModal.scrollLeft;
+                scrollTop = resumeModal.scrollTop;
+                e.preventDefault();
+            }
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - startX;
+            const y = e.pageY - startY;
+            resumeModal.scrollLeft = scrollLeft - (x - (e.pageX - resumeModal.offsetLeft - startX));
+            resumeModal.scrollTop = scrollTop - (y - (e.pageY - resumeModal.offsetTop - startY));
+        });
+        
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                modalImg.classList.remove('dragging');
+            }
+        });
+        
+        // Touch support for mobile
+        let touchStartX, touchStartY, touchScrollLeft, touchScrollTop;
+        
+        modalImg.addEventListener('touchstart', function(e) {
+            if (currentZoom > 1) {
+                isDragging = true;
+                const touch = e.touches[0];
+                touchStartX = touch.pageX - modalImg.offsetLeft;
+                touchStartY = touch.pageY - modalImg.offsetTop;
+                touchScrollLeft = resumeModal.scrollLeft;
+                touchScrollTop = resumeModal.scrollTop;
+            }
+        }, { passive: true });
+        
+        modalImg.addEventListener('touchmove', function(e) {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            const x = touch.pageX - touchStartX;
+            const y = touch.pageY - touchStartY;
+            resumeModal.scrollLeft = touchScrollLeft - (x - (touch.pageX - resumeModal.offsetLeft - touchStartX));
+            resumeModal.scrollTop = touchScrollTop - (y - (touch.pageY - resumeModal.offsetTop - touchStartY));
+        }, { passive: true });
+        
+        modalImg.addEventListener('touchend', function() {
+            isDragging = false;
+        });
+        
+        // Zoom in
+        if (zoomInBtn) {
+            zoomInBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (currentZoom < maxZoom) {
+                    currentZoom = Math.min(currentZoom + zoomStep, maxZoom);
+                    modalImg.style.transform = `scale(${currentZoom})`;
+                    // Enable scrolling when zoomed
+                    if (currentZoom > 1) {
+                        modalImg.style.cursor = 'grab';
+                    }
+                }
+            });
+        }
+        
+        // Zoom out
+        if (zoomOutBtn) {
+            zoomOutBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (currentZoom > minZoom) {
+                    currentZoom = Math.max(currentZoom - zoomStep, minZoom);
+                    modalImg.style.transform = `scale(${currentZoom})`;
+                    if (currentZoom <= 1) {
+                        modalImg.style.cursor = 'default';
+                        // Reset scroll position when zoomed out
+                        resumeModal.scrollTop = 0;
+                        resumeModal.scrollLeft = 0;
+                    }
+                }
+            });
+        }
+        
+        // Reset zoom
+        if (zoomResetBtn) {
+            zoomResetBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentZoom = 1;
+                modalImg.style.transform = `scale(${currentZoom})`;
+                modalImg.style.cursor = 'default';
+                // Reset scroll position
+                resumeModal.scrollTop = 0;
+                resumeModal.scrollLeft = 0;
+            });
+        }
+        
+        // Mouse wheel zoom (with Ctrl/Cmd key) or scroll (without modifier)
+        resumeModal.addEventListener('wheel', function(e) {
+            if (resumeModal.classList.contains('active')) {
+                // Zoom with Ctrl/Cmd + wheel
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -zoomStep : zoomStep;
+                    currentZoom = Math.max(minZoom, Math.min(maxZoom, currentZoom + delta));
+                    modalImg.style.transform = `scale(${currentZoom})`;
+                    if (currentZoom > 1) {
+                        modalImg.style.cursor = 'grab';
+                    } else {
+                        modalImg.style.cursor = 'default';
+                    }
+                }
+                // Otherwise, allow normal scrolling
+            }
+        }, { passive: false });
+    }
 });

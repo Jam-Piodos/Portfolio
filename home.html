@@ -134,8 +134,24 @@
         </div>
     </main>
     <main id="resume" class="container">
-        <img class="pic3" src="2.jpg" alt="resume.jpg">
+        <div class="resume-container">
+            <img class="pic3 resume-image" src="2.jpg" alt="resume.jpg" id="resume-image">
+            <p class="resume-hint">Click on the resume to zoom and read</p>
+        </div>
     </main>
+
+    <!-- Resume Modal -->
+    <div id="resume-modal" class="resume-modal">
+        <span class="resume-modal-close">&times;</span>
+        <div class="resume-modal-wrapper">
+            <img class="resume-modal-content" id="resume-modal-img" src="2.jpg" alt="Resume">
+        </div>
+        <div class="resume-modal-controls">
+            <button class="zoom-btn" id="zoom-in">+</button>
+            <button class="zoom-btn" id="zoom-out">-</button>
+            <button class="zoom-btn" id="zoom-reset">Reset</button>
+        </div>
+    </div>
 
     <main id="projects" class="container hidden">
         <div class="repo-section-header">
@@ -160,7 +176,7 @@
 </body>
 <footer>
         <div>
-            <p>&copy; 2023 Jam Piodos. All rights reserved.</p>
+            <p>&copy; 2026 Jam Piodos. All rights reserved.</p>
         </div>
 </footer>
 
