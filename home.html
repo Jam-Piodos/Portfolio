@@ -10,7 +10,7 @@
 
 <body>
 
-    <audio controls autoplay>
+    <audio id="bg-audio" controls autoplay>
         <source src="videoplayback.m4a" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -22,6 +22,7 @@
                 <li><a href="#" data-page="home">Home</a></li>  
                 <li><a href="#" data-page="about">About</a></li>
                 <li><a href="#" data-page="resume">Resume</a></li>
+                <li><a href="#" data-page="multimedia">Multimedia</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Github Projects</a>
                     <ul class="dropdown-content">
@@ -135,8 +136,29 @@
     </main>
     <main id="resume" class="container">
         <div class="resume-container">
-            <img class="pic3 resume-image" src="2.jpg" alt="resume.jpg" id="resume-image">
+            <img class="pic3 resume-image" src="2.png" alt="resume.jpg" id="resume-image">
             <p class="resume-hint">Click on the resume to zoom and read</p>
+        </div>
+    </main>
+
+    <main id="multimedia" class="container hidden">
+        <div class="multimedia-section">
+            <h2>Multimedia Projects</h2>
+            <p class="multimedia-description">
+                A collection of my multimedia work. Enjoy this featured film directly here on the page.
+            </p>
+            <div class="multimedia-video-wrapper">
+                <iframe
+                    src="https://drive.google.com/file/d/1LZjmH-iqsWRKQ8o_8u5h5pxy1kwRtN5u/preview"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    loading="lazy"
+                ></iframe>
+            </div>
+            <h3 class="multimedia-gallery-title">Photo Gallery</h3>
+            <div id="multimedia-gallery" class="media-card-grid">
+                <!-- Image cards will be injected by app.js -->
+            </div>
         </div>
     </main>
 

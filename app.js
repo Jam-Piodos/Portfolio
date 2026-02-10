@@ -101,6 +101,9 @@ function getRepoIcon(language) {
 
 // Set up event listeners for navigation links
 document.addEventListener('DOMContentLoaded', function() {
+    // Background audio element
+    const bgAudio = document.getElementById('bg-audio');
+
     // Get all navigation links
     const navLinks = document.querySelectorAll('nav a[data-page]');
     
@@ -116,6 +119,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             navigateTo(page);
             
+            // Pause background audio when going to multimedia section
+            if (page === 'multimedia' && bgAudio && !bgAudio.paused) {
+                bgAudio.pause();
+            }
+
             // Load repositories when navigating to those sections
             if (page === 'projects') {
                 fetchRepositories('PinkyBabe', 'pinkybabe-repos');
@@ -142,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Pre-load repositories for both accounts
     fetchRepositories('PinkyBabe', 'pinkybabe-repos');
     fetchRepositories('Jam-Piodos', 'jam-piodos-repos');
-    
     // Handle dropdown click (instead of hover)
     const dropbtn = document.querySelector('.dropbtn');
     const dropdown = document.querySelector('.dropdown');
@@ -416,5 +423,68 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Otherwise, allow normal scrolling
             }
         }, { passive: false });
+    }
+
+    // Multimedia: pause audio when interacting with video wrapper
+    const multimediaVideoWrapper = document.querySelector('.multimedia-video-wrapper');
+    if (multimediaVideoWrapper && bgAudio) {
+        multimediaVideoWrapper.addEventListener('click', function() {
+            if (!bgAudio.paused) {
+                bgAudio.pause();
+            }
+        });
+    }
+
+    // Multimedia image gallery (randomized cards, no sorting by name, using original links)
+    const multimediaGallery = document.getElementById('multimedia-gallery');
+    if (multimediaGallery) {
+        const multimediaImageLinks = [
+            'https://drive.google.com/file/d/1tmRBi2pkWNkrFWmGl97JpMfFX-oTm1wT/view?usp=drive_link',
+            'https://drive.google.com/file/d/1tbGpm6Air5PoNpyA7NgOjTkg4p25iRmG/view?usp=drive_link',
+            'https://drive.google.com/file/d/1V7Ig2HT6Xl7WLWqd6X9xOddN0jSeDo4n/view?usp=drive_link',
+            'https://drive.google.com/file/d/1st9l4o6juYJsks-OalKIAxw94-gv9zfg/view?usp=drive_link',
+            'https://drive.google.com/file/d/1nt3LTh2Yr23RZNajK4Pa-cNWSdwFF9FI/view?usp=drive_link',
+            'https://drive.google.com/file/d/1nAv9Tb1KMpNAI_L57SGiRJ7riKd4rAwY/view?usp=drive_link',
+            'https://drive.google.com/file/d/1mwnsjY9PTUjWgIuXO2GbiErzibh8Olj1/view?usp=drive_link',
+            'https://drive.google.com/file/d/1j8FMbOsYJBHPWe4MkbbK2RYQEgnDCjKT/view?usp=drive_link',
+            'https://drive.google.com/file/d/1htx60iarn29Z5Q8n931cd1aLa5B8SDBm/view?usp=drive_link',
+            'https://drive.google.com/file/d/1Yej-Kx3qG0TdGSCGfaZqB47c-wrwAa14/view?usp=drive_link',
+            'https://drive.google.com/file/d/1Yez__Yg33UR7HzdRvmdwbz2jeOciHPNj/view?usp=drive_link',
+            'https://drive.google.com/file/d/1VPgxJ6w1ogrk5XlmfrFHxQyNqTTiKVkV/view?usp=drive_link',
+            'https://drive.google.com/file/d/1qlrNxVDD_JdRv8tZRPdGz8iLvuhDuvZ9/view?usp=drive_link',
+            'https://drive.google.com/file/d/1pJsNKZqDAgoIq-w7C4aCEw4V93KU6fhV/view?usp=drive_link',
+            'https://drive.google.com/file/d/1M4OEBxOPikRqHinZYt_BxRMWu9STOoZH/view?usp=drive_link',
+            'https://drive.google.com/file/d/1LyWFmLIOqz-TnTN2JV-sKaRcR_CxcDM/view?usp=drive_link',
+            'https://drive.google.com/file/d/1zatZ99H0ZN1RoFBI9zNGyZ6I4jAEsimE/view?usp=drive_link',
+            'https://drive.google.com/file/d/1R3Kg-X2HlWyHakuJACK-N2xVh0sQ1DJG/view?usp=drive_link',
+            'https://drive.google.com/file/d/1aBKJ4l4zxRGgb9ki6XbKhZAaRS5HnO34/view?usp=drive_link',
+            'https://drive.google.com/file/d/1eGgkSjvAb2Ix3_1rTrThk7M1C1EgkmVw/view?usp=drive_link',
+            'https://drive.google.com/file/d/1btXI3k4C07s28om3xGXevD0Q0JbSJmci/view?usp=drive_link',
+            'https://drive.google.com/file/d/1nA-Uh1OOcsXYsO0l-BqNu-0E5_9B6Eno/view?usp=drive_link'
+        ];
+
+        // Create a randomized order each time without name-based sorting
+        const shuffledLinks = [...multimediaImageLinks].sort(() => Math.random() - 0.5);
+
+        shuffledLinks.forEach((link, index) => {
+            const card = document.createElement('div');
+            card.className = 'media-card';
+
+            // Use the Drive preview URL so the original link works visually
+            const previewUrl = link.replace('/view?usp=drive_link', '/preview');
+
+            const iframe = document.createElement('iframe');
+            iframe.src = previewUrl;
+            iframe.loading = 'lazy';
+            iframe.setAttribute('allow', 'encrypted-media');
+            iframe.setAttribute('title', `Multimedia photo ${index + 1}`);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'media-card-image-wrapper';
+            wrapper.appendChild(iframe);
+
+            card.appendChild(wrapper);
+            multimediaGallery.appendChild(card);
+        });
     }
 });
