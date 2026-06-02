@@ -15,24 +15,43 @@
         Your browser does not support the audio element.
     </audio>
 
-    <header>
-        <h1>Portfolio ni Piodos</h1>
-        <nav>
+    <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">
+            <span class="sidebar-toggle-bar"></span>
+            <span class="sidebar-toggle-bar"></span>
+            <span class="sidebar-toggle-bar"></span>
+        </span>
+        <span class="sidebar-toggle-label">Menu</span>
+    </button>
+    <div class="sidebar-overlay" id="sidebar-overlay" hidden></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Site navigation">
+        <div class="sidebar-brand">
+            <h1>Portfolio ni Piodos</h1>
+        </div>
+        <nav class="sidebar-nav">
             <ul>
-                <li><a href="#" data-page="home">Home</a></li>  
-                <li><a href="#" data-page="about">About</a></li>
-                <li><a href="#" data-page="resume">Resume</a></li>
-                <li><a href="#" data-page="multimedia">Multimedia</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropbtn">Github Projects</a>
-                    <ul class="dropdown-content">
-                        <li><a href="#" data-page="projects">PinkyBabe</a></li>
-                        <li><a href="#" data-page="repositories">Jam-Piodos</a></li>
+                <li><a href="#" data-page="home" class="sidebar-link">Home</a></li>
+                <li><a href="#" data-page="about" class="sidebar-link">About</a></li>
+                <li><a href="#" data-page="resume" class="sidebar-link">Resume</a></li>
+                <li><a href="#" data-page="experiences" class="sidebar-link">Experiences</a></li>
+                <li><a href="#" data-page="multimedia" class="sidebar-link">Multimedia</a></li>
+                <li><a href="#" data-page="awards" class="sidebar-link">Research Awards</a></li>
+                <li class="sidebar-nav-group">
+                    <button type="button" class="sidebar-nav-toggle" id="github-nav-toggle" aria-expanded="false" aria-controls="github-nav-sub">
+                        GitHub Projects
+                    </button>
+                    <ul class="sidebar-nav-sub" id="github-nav-sub">
+                        <li><a href="#" data-page="projects" class="sidebar-link">PinkyBabe</a></li>
+                        <li><a href="#" data-page="repositories" class="sidebar-link">Jam-Piodos</a></li>
+                        <li><a href="#" data-page="group-projects" class="sidebar-link">MFFS Projects</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
-    </header>
+    </aside>
+
+    <div class="app-main">
 
     <main id="home" class="container">
         <div class="home-content">
@@ -136,8 +155,8 @@
     </main>
     <main id="resume" class="container">
         <div class="resume-container">
-            <img class="pic3 resume-image" src="2.png" alt="resume.jpg" id="resume-image">
-            <p class="resume-hint">Click on the resume to zoom and read</p>
+            <img class="pic3 resume-image viewable-photo" src="assets/resume.png" alt="Jam Piodos resume" id="resume-image" role="button" tabindex="0">
+            <p class="resume-hint">Click on the resume to zoom and read. Use Print while viewing.</p>
         </div>
     </main>
 
@@ -162,23 +181,156 @@
         </div>
     </main>
 
+    <!-- Photo viewer (awards and other images) -->
+    <div id="photo-modal" class="photo-modal" role="dialog" aria-modal="true" aria-labelledby="photo-modal-caption" hidden>
+        <button type="button" class="photo-modal-close" aria-label="Close image viewer">&times;</button>
+        <div class="photo-modal-wrapper">
+            <img class="photo-modal-content" id="photo-modal-img" src="" alt="">
+        </div>
+        <p id="photo-modal-caption" class="photo-modal-caption"></p>
+    </div>
+
     <!-- Resume Modal -->
     <div id="resume-modal" class="resume-modal">
         <span class="resume-modal-close">&times;</span>
         <div class="resume-modal-wrapper">
-            <img class="resume-modal-content" id="resume-modal-img" src="2.jpg" alt="Resume">
+            <img class="resume-modal-content" id="resume-modal-img" src="assets/resume.png" alt="Jam Piodos resume">
         </div>
         <div class="resume-modal-controls">
-            <button class="zoom-btn" id="zoom-in">+</button>
-            <button class="zoom-btn" id="zoom-out">-</button>
-            <button class="zoom-btn" id="zoom-reset">Reset</button>
+            <button type="button" class="zoom-btn" id="zoom-in" aria-label="Zoom in">+</button>
+            <button type="button" class="zoom-btn" id="zoom-out" aria-label="Zoom out">-</button>
+            <button type="button" class="zoom-btn" id="zoom-reset" aria-label="Reset zoom">Reset</button>
+            <button type="button" class="zoom-btn print-btn" id="resume-print" aria-label="Print resume">Print</button>
         </div>
     </div>
+
+    <main id="awards" class="container hidden">
+        <div class="awards-section">
+            <h2>Research Awards</h2>
+            <p class="awards-intro">
+                Recognition from regional and institutional research competitions during my studies at Northern Bukidnon State College.
+            </p>
+            <p class="awards-view-hint">Click any photo to view full size</p>
+
+            <article class="award-group">
+                <h3 class="award-group-title">ASEAN Geospatial Challenge 2026</h3>
+                <div class="award-video-block">
+                    <h4>Competition Highlights</h4>
+                    <div class="award-video-wrapper">
+                        <iframe
+                            src="https://drive.google.com/file/d/1_tKMA0HW5w7rRrCgr-KkN-2_t-NdHtgh/preview"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                            loading="lazy"
+                            title="ASEAN Geospatial Challenge 2026 video"
+                        ></iframe>
+                    </div>
+                    <p class="award-video-caption">Video from the ASEAN Geospatial Challenge 2026 participation.</p>
+                </div>
+                <div class="awards-grid">
+                    <div class="award-card">
+                        <button type="button" class="award-image-trigger" data-src="assets/asean-geospatial-certificate.jpg" aria-label="View full size: ASEAN Geospatial Challenge certificate">
+                            <div class="award-card-image-wrapper">
+                                <img src="assets/asean-geospatial-certificate.jpg" alt="ASEAN Geospatial Challenge Certificate of Participation" loading="lazy">
+                            </div>
+                        </button>
+                        <div class="award-card-body">
+                            <h4>Certificate of Participation</h4>
+                            <p>Participated in the ASEAN Geospatial Challenge 2026, with a Certificate of Participation issued by the Singapore Land Authority and supported by NAMRIA Philippines and other regional geospatial agencies. Represented Northern Bukidnon State College in this ASEAN-wide competition.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="award-group">
+                <h3 class="award-group-title">LAMBIGIT RIS 2026 — 4th Place, Poster Presentation</h3>
+                <p class="award-group-meta">3rd Northern Mindanao Research and Innovation Summit · Hosted by USTP, BukSU, and DOST · Participants from across Northern Mindanao</p>
+                <div class="awards-grid">
+                    <div class="award-card">
+                        <button type="button" class="award-image-trigger" data-src="assets/lambigit-award.png" aria-label="View full size: LAMBIGIT certificate">
+                            <div class="award-card-image-wrapper">
+                                <img src="assets/lambigit-award.png" alt="LAMBIGIT Certificate of Recognition — 4th Place Poster Presentation" loading="lazy">
+                            </div>
+                        </button>
+                        <div class="award-card-body">
+                            <h4>4th Place — Poster Presentation</h4>
+                            <p>Earned Fourth Place in Poster Presentation at LAMBIGIT RIS 2026 for the study &ldquo;Enhancing Agrarian Land Management Through GIS-Integrated Record Visualization,&rdquo; competing among researchers from institutions across Northern Mindanao.</p>
+                        </div>
+                    </div>
+                    <div class="award-card">
+                        <button type="button" class="award-image-trigger" data-src="assets/lambigit-poster-presentation.jpg" aria-label="View full size: LAMBIGIT poster presentation">
+                            <div class="award-card-image-wrapper">
+                                <img src="assets/lambigit-poster-presentation.jpg" alt="Poster presentation at LAMBIGIT summit" loading="lazy">
+                            </div>
+                        </button>
+                        <div class="award-card-body">
+                            <h4>Poster Presentation at the Summit</h4>
+                            <p>Presented the research poster at the LAMBIGIT venue, discussing GIS-integrated record visualization for agrarian land management with judges and fellow participants from the region.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="award-group award-group-pasidungog">
+                <h3 class="award-group-title">PASIDUNGOG — 3rd Place, Poster &amp; Paper Presentation</h3>
+                <p class="award-group-meta">Hosted by Northern Bukidnon State College · 2nd Research and Extension Summit, April 21&ndash;22, 2026 · Participated by all 4th-year NBSC students across all courses</p>
+                <p class="award-group-summary">Earned Third Place in both Poster Presentation and Paper (Oral) Presentation at PASIDUNGOG, NBSC&rsquo;s college-wide research and extension summit held at the NBSC Covered Court in Manolo Fortich, Bukidnon.</p>
+                <div class="awards-grid awards-grid-pasidungog">
+                    <div class="award-card">
+                        <button type="button" class="award-image-trigger" data-src="assets/pasidungog-poster-plaque.jpg" aria-label="View full size: PASIDUNGOG poster plaque">
+                            <div class="award-card-image-wrapper award-card-image-plaque">
+                                <img src="assets/pasidungog-poster-plaque.jpg" alt="Third Place Poster Presentation plaque — PASIDUNGOG" loading="lazy">
+                            </div>
+                        </button>
+                        <div class="award-card-body">
+                            <h4>3rd Place — Poster Presentation</h4>
+                            <p>Third Place, Poster Presentation (Student Category), at the 2nd Research and Extension Summit of Northern Bukidnon State College during PASIDUNGOG.</p>
+                        </div>
+                    </div>
+                    <div class="award-card">
+                        <button type="button" class="award-image-trigger" data-src="assets/pasidungog-paper-plaque.jpg" aria-label="View full size: PASIDUNGOG paper presentation plaque">
+                            <div class="award-card-image-wrapper award-card-image-plaque">
+                                <img src="assets/pasidungog-paper-plaque.jpg" alt="Third Place Paper Presentation plaque — PASIDUNGOG" loading="lazy">
+                            </div>
+                        </button>
+                        <div class="award-card-body">
+                            <h4>3rd Place — Paper Presentation</h4>
+                            <p>Third Place, Oral Presentation (Student Category)&mdash;the paper presentation category&mdash;at the same PASIDUNGOG summit, alongside the poster award.</p>
+                        </div>
+                    </div>
+                </div>
+                <figure class="award-feature">
+                    <button type="button" class="award-image-trigger award-feature-trigger" data-src="assets/pasidungog-certificates.jpg" aria-label="View full size: PASIDUNGOG certificates photo">
+                        <div class="award-feature-image-wrapper">
+                            <img src="assets/pasidungog-certificates.jpg" alt="Jam Piodos holding Third Place certificates for poster and paper presentation at PASIDUNGOG" loading="lazy">
+                        </div>
+                    </button>
+                    <figcaption>Third Place certificates for both Poster and Paper Presentation at PASIDUNGOG, hosted by NBSC for all 4th-year students across programs.</figcaption>
+                </figure>
+            </article>
+        </div>
+    </main>
+
+    <main id="experiences" class="container hidden">
+        <div class="experiences-section">
+            <h2>Experiences</h2>
+            <article class="experience-block">
+                <h3 class="experience-title">On-the-Job Training (OJT)</h3>
+                <p class="experience-meta">Bureau of Fire Protection (BFP) R10 &mdash; Manolo Fortich Fire Station &middot; Northern Bukidnon State College</p>
+                <div class="experience-description">
+                    <p>Completed my OJT with the Bureau of Fire Protection at the Manolo Fortich Fire Station in partnership with Northern Bukidnon State College. The training focused on applying IT skills in a public-service setting&mdash;supporting fire-prevention outreach, station operations, and collaborative projects such as community fire-safety programs and digital tools for the station.</p>
+                    <p>Highlights included hands-on work with BFP personnel, participation in culminating activities with fellow NBSC students, and contributing to initiatives that connect technology with community fire safety (&ldquo;Sa pag-iwas sa sunog, hindi ka nag-iisa&rdquo;).</p>
+                </div>
+                <p class="experiences-view-hint">Click any photo to view full size</p>
+                <div id="ojt-gallery" class="experience-gallery" aria-label="OJT photo gallery"></div>
+            </article>
+        </div>
+    </main>
 
     <main id="projects" class="container hidden">
         <div class="repo-section-header">
             <h2>PinkyBabe Repositories</h2>
-            <p class="repo-account-link">View on <a href="https://github.com/PinkyBabe" target="_blank">GitHub</a></p>
+            <p class="repo-account-link">View on <a href="https://github.com/PinkyBabe" target="_blank" rel="noopener noreferrer">GitHub</a></p>
         </div>
         <div class="repos-grid" id="pinkybabe-repos">
             <div class="loading-message">Loading repositories...</div>
@@ -187,19 +339,25 @@
     <main id="repositories" class="container hidden">
         <div class="repo-section-header">
             <h2>Jam-Piodos Repositories</h2>
-            <p class="repo-account-link">View on <a href="https://github.com/Jam-Piodos" target="_blank">GitHub</a></p>
+            <p class="repo-account-link">View on <a href="https://github.com/Jam-Piodos" target="_blank" rel="noopener noreferrer">GitHub</a></p>
         </div>
         <div class="repos-grid" id="jam-piodos-repos">
             <div class="loading-message">Loading repositories...</div>
         </div>
     </main>
+    <main id="group-projects" class="container hidden">
+        <div class="repo-section-header">
+            <h2>MFFS Projects</h2>
+            <p class="repo-account-link">Collaborative repositories &mdash; <a href="https://github.com/fsmanolofortich-droid" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+        </div>
+        <div class="repos-grid" id="group-projects-repos">
+            <div class="loading-message">Loading repositories...</div>
+        </div>
+    </main>
+
+    </div><!-- .app-main -->
 
     <script src="app.js"></script>
 </body>
-<footer>
-        <div>
-            <p>&copy; 2026 Jam Piodos. All rights reserved.</p>
-        </div>
-</footer>
 
 </html>

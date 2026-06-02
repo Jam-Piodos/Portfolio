@@ -1,3 +1,88 @@
+/** Resolve a repo-relative asset path (works on GitHub Pages and local file open). */
+function resolveAssetPath(relativePath) {
+    return new URL(relativePath, document.baseURI).href;
+}
+
+function pauseBgAudioForVideo() {
+    const bgAudio = document.getElementById('bg-audio');
+    if (bgAudio && !bgAudio.paused) {
+        bgAudio.pause();
+    }
+}
+
+function printResumeImage(imageSrc) {
+    const absoluteSrc = imageSrc && (imageSrc.startsWith('http') || imageSrc.startsWith('blob:') || imageSrc.startsWith('data:'))
+        ? imageSrc
+        : resolveAssetPath(imageSrc || 'assets/resume.png');
+
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('title', 'Print resume');
+    iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(
+        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+        '<title>Resume - Jam Piodos</title>' +
+        '<style>@page{margin:0.35in}body{margin:0;padding:0}' +
+        'img{display:block;width:100%;height:auto;max-width:8.5in;margin:0 auto}</style>' +
+        '</head><body></body></html>'
+    );
+    doc.close();
+
+    const img = doc.createElement('img');
+    img.alt = 'Jam Piodos resume';
+    img.src = absoluteSrc;
+    doc.body.appendChild(img);
+
+    const cleanup = function() {
+        if (iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+        }
+    };
+
+    const runPrint = function() {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        iframe.contentWindow.addEventListener('afterprint', cleanup, { once: true });
+        setTimeout(cleanup, 5000);
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+        runPrint();
+    } else {
+        img.onload = runPrint;
+        img.onerror = function() {
+            cleanup();
+            window.alert('Could not load the resume image for printing.');
+        };
+    }
+}
+
+function setupVideoBgAudioPause() {
+    const videoWrappers = document.querySelectorAll('.award-video-wrapper, .multimedia-video-wrapper');
+
+    videoWrappers.forEach(function(wrapper) {
+        wrapper.addEventListener('pointerdown', pauseBgAudioForVideo);
+        wrapper.addEventListener('click', pauseBgAudioForVideo);
+    });
+
+    document.addEventListener('focusin', function(e) {
+        if (e.target.tagName === 'IFRAME') {
+            pauseBgAudioForVideo();
+        }
+    });
+
+    window.addEventListener('blur', function() {
+        setTimeout(function() {
+            if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+                pauseBgAudioForVideo();
+            }
+        }, 0);
+    });
+}
+
 function navigateTo(page) {
     // Hide all content sections
     const contentSections = document.querySelectorAll('main');
@@ -99,83 +184,164 @@ function getRepoIcon(language) {
     return iconMap[language] || '📁';
 }
 
+const GITHUB_PAGES = {
+    projects: { username: 'PinkyBabe', containerId: 'pinkybabe-repos' },
+    repositories: { username: 'Jam-Piodos', containerId: 'jam-piodos-repos' },
+    'group-projects': { username: 'fsmanolofortich-droid', containerId: 'group-projects-repos' }
+};
+
+function loadGithubRepos(pageKey) {
+    const config = GITHUB_PAGES[pageKey];
+    if (config) {
+        fetchRepositories(config.username, config.containerId);
+    }
+}
+
+const OJT_GALLERY = [
+    { src: 'assets/ojt/646322696_1952660806125318_1896668420251268510_n.jpg', alt: 'OJT at BFP Manolo Fortich Fire Station — fire truck and fire prevention banner' },
+    { src: 'assets/ojt/702089017_1742155773817221_6857263931748859545_n.jpg', alt: 'OJT culminating activity with NBSC students and BFP personnel' },
+    { src: 'assets/ojt/651821656_925937030134904_7579710362941004946_n.jpg', alt: 'OJT training with Bureau of Fire Protection' },
+    { src: 'assets/ojt/691826096_961635686507991_568985108390686022_n.jpg', alt: 'OJT at Manolo Fortich Fire Station' },
+    { src: 'assets/ojt/699772534_1526021155792583_3343767949976279593_n.png', alt: 'OJT fire station activities' },
+    { src: 'assets/ojt/700272028_1518342459681543_5201522506933643512_n.png', alt: 'OJT with BFP team' },
+    { src: 'assets/ojt/702239814_1992494128013390_7935848232909593296_n.jpg', alt: 'OJT community fire safety program' },
+    { src: 'assets/ojt/702619492_1606529913773242_4339789676708636926_n.png', alt: 'OJT station duties and training' }
+];
+
 // Set up event listeners for navigation links
 document.addEventListener('DOMContentLoaded', function() {
     // Background audio element
     const bgAudio = document.getElementById('bg-audio');
 
-    // Get all navigation links
-    const navLinks = document.querySelectorAll('nav a[data-page]');
-    
-    // Add click event listeners to navigation links
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const page = this.getAttribute('data-page');
-            
-            // Update active state
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            
-            navigateTo(page);
-            
-            // Pause background audio when going to multimedia section
-            if (page === 'multimedia' && bgAudio && !bgAudio.paused) {
-                bgAudio.pause();
-            }
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const githubNavToggle = document.getElementById('github-nav-toggle');
+    const githubNavSub = document.getElementById('github-nav-sub');
 
-            // Load repositories when navigating to those sections
-            if (page === 'projects') {
-                fetchRepositories('PinkyBabe', 'pinkybabe-repos');
-            } else if (page === 'repositories') {
-                fetchRepositories('Jam-Piodos', 'jam-piodos-repos');
-            }
-        });
-    });
-    
-    // Set initial active state
-    const initialPage = document.getElementById('home') ? 'home' : null;
-    if (initialPage) {
-        const initialLink = document.querySelector(`nav a[data-page="${initialPage}"]`);
-        if (initialLink) {
-            initialLink.classList.add('active');
+    function updateSidebarToggleState(isOpen) {
+        if (!sidebarToggle) return;
+        sidebarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        sidebarToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    }
+
+    function openSidebar() {
+        document.body.classList.add('sidebar-open');
+        if (sidebarOverlay) {
+            sidebarOverlay.hidden = false;
+        }
+        updateSidebarToggleState(true);
+    }
+
+    function closeSidebar() {
+        document.body.classList.remove('sidebar-open');
+        if (sidebarOverlay) {
+            sidebarOverlay.hidden = true;
+        }
+        updateSidebarToggleState(false);
+    }
+
+    function toggleSidebar() {
+        if (document.body.classList.contains('sidebar-open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
         }
     }
 
-    // Initial navigation to the home page (only if on home.html)
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        updateSidebarToggleState(false);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
+    if (githubNavToggle && githubNavSub) {
+        githubNavToggle.addEventListener('click', function() {
+            const expanded = githubNavToggle.getAttribute('aria-expanded') === 'true';
+            githubNavToggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+            githubNavSub.classList.toggle('open');
+        });
+    }
+
+    // Get all sidebar navigation links
+    const navLinks = document.querySelectorAll('.sidebar-nav a[data-page]');
+
+    function setActiveNav(page) {
+        navLinks.forEach(function(l) {
+            l.classList.remove('active');
+        });
+        const activeLink = document.querySelector('.sidebar-nav a[data-page="' + page + '"]');
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+        if (GITHUB_PAGES[page] && githubNavToggle && githubNavSub) {
+            githubNavToggle.setAttribute('aria-expanded', 'true');
+            githubNavSub.classList.add('open');
+        }
+    }
+
+    // Add click event listeners to navigation links
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+
+            setActiveNav(page);
+            navigateTo(page);
+            closeSidebar();
+
+            // Pause background audio when a page has embedded video
+            if (page === 'multimedia' || page === 'awards') {
+                pauseBgAudioForVideo();
+            }
+
+            loadGithubRepos(page);
+        });
+    });
+
+    // Set initial active state
     if (document.getElementById('home')) {
+        setActiveNav('home');
         navigateTo('home');
     }
-    
-    // Pre-load repositories for both accounts
-    fetchRepositories('PinkyBabe', 'pinkybabe-repos');
-    fetchRepositories('Jam-Piodos', 'jam-piodos-repos');
-    // Handle dropdown click (instead of hover)
-    const dropbtn = document.querySelector('.dropbtn');
-    const dropdown = document.querySelector('.dropdown');
-    
-    if (dropbtn && dropdown) {
-        dropbtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Toggle dropdown
-            dropdown.classList.toggle('active');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
-        
-        // Close dropdown when clicking on a dropdown item
-        const dropdownLinks = document.querySelectorAll('.dropdown-content a');
-        dropdownLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                dropdown.classList.remove('active');
-            });
+
+    // Pre-load repositories for all GitHub accounts
+    Object.keys(GITHUB_PAGES).forEach(function(pageKey) {
+        loadGithubRepos(pageKey);
+    });
+
+    // OJT photo gallery
+    const ojtGallery = document.getElementById('ojt-gallery');
+    if (ojtGallery) {
+        const seen = new Set();
+        OJT_GALLERY.forEach(function(item) {
+            if (seen.has(item.src)) return;
+            seen.add(item.src);
+
+            const card = document.createElement('div');
+            card.className = 'experience-gallery-item';
+
+            const trigger = document.createElement('button');
+            trigger.type = 'button';
+            trigger.className = 'award-image-trigger experience-image-trigger';
+            trigger.setAttribute('data-src', item.src);
+            trigger.setAttribute('aria-label', 'View full size: ' + item.alt);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'experience-gallery-image-wrapper';
+
+            const img = document.createElement('img');
+            img.src = item.src;
+            img.alt = item.alt;
+            img.loading = 'lazy';
+
+            wrapper.appendChild(img);
+            trigger.appendChild(wrapper);
+            card.appendChild(trigger);
+            ojtGallery.appendChild(card);
         });
     }
     
@@ -187,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const zoomInBtn = document.getElementById('zoom-in');
     const zoomOutBtn = document.getElementById('zoom-out');
     const zoomResetBtn = document.getElementById('zoom-reset');
+    const resumePrintBtn = document.getElementById('resume-print');
     
     let currentZoom = 1;
     const minZoom = 0.5;
@@ -201,7 +368,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Open modal when resume image is clicked
         if (resumeImage && resumeModal && modalImg) {
-            resumeImage.addEventListener('click', function() {
+            const openResumeModal = function() {
+                const resumeSrc = resumeImage.getAttribute('src');
+                if (resumeSrc) {
+                    modalImg.src = resolveAssetPath(resumeSrc);
+                }
                 resumeModal.classList.add('active');
                 currentZoom = 1;
                 translateX = 0;
@@ -213,6 +384,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Reset scroll position
                 resumeModal.scrollTop = 0;
                 resumeModal.scrollLeft = 0;
+            };
+
+            resumeImage.addEventListener('click', openResumeModal);
+            resumeImage.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openResumeModal();
+                }
             });
             
             // Function to update image transform
@@ -400,6 +579,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 resumeModal.scrollLeft = 0;
             });
         }
+
+        if (resumePrintBtn) {
+            resumePrintBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (!resumeModal.classList.contains('active')) return;
+                printResumeImage(modalImg.src);
+            });
+        }
         
         // Mouse wheel zoom (with Ctrl/Cmd key) or scroll (without modifier)
         resumeModal.addEventListener('wheel', function(e) {
@@ -425,15 +612,64 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: false });
     }
 
-    // Multimedia: pause audio when interacting with video wrapper
-    const multimediaVideoWrapper = document.querySelector('.multimedia-video-wrapper');
-    if (multimediaVideoWrapper && bgAudio) {
-        multimediaVideoWrapper.addEventListener('click', function() {
-            if (!bgAudio.paused) {
-                bgAudio.pause();
+    // Photo viewer for research awards (and other viewable images)
+    const photoModal = document.getElementById('photo-modal');
+    const photoModalImg = document.getElementById('photo-modal-img');
+    const photoModalCaption = document.getElementById('photo-modal-caption');
+    const photoModalClose = document.querySelector('.photo-modal-close');
+
+    function openPhotoModal(relativePath, altText) {
+        if (!photoModal || !photoModalImg) return;
+        photoModalImg.src = resolveAssetPath(relativePath);
+        photoModalImg.alt = altText || '';
+        if (photoModalCaption) {
+            photoModalCaption.textContent = altText || '';
+        }
+        photoModal.hidden = false;
+        photoModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePhotoModal() {
+        if (!photoModal) return;
+        photoModal.classList.remove('active');
+        photoModal.hidden = true;
+        document.body.style.overflow = '';
+        if (photoModalImg) {
+            photoModalImg.removeAttribute('src');
+        }
+    }
+
+    if (photoModal) {
+        document.addEventListener('click', function(e) {
+            const trigger = e.target.closest('.award-image-trigger, .experience-image-trigger');
+            if (!trigger) return;
+            const path = trigger.getAttribute('data-src');
+            const img = trigger.querySelector('img');
+            const alt = img ? img.getAttribute('alt') : '';
+            if (path) {
+                openPhotoModal(path, alt);
+            }
+        });
+
+        if (photoModalClose) {
+            photoModalClose.addEventListener('click', closePhotoModal);
+        }
+
+        photoModal.addEventListener('click', function(e) {
+            if (e.target === photoModal || e.target.classList.contains('photo-modal-wrapper')) {
+                closePhotoModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && photoModal.classList.contains('active')) {
+                closePhotoModal();
             }
         });
     }
+
+    setupVideoBgAudioPause();
 
     // Multimedia image gallery (randomized cards, no sorting by name, using original links)
     const multimediaGallery = document.getElementById('multimedia-gallery');
