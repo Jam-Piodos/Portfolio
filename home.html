@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio ni Piodos</title>
+    <script>
+        (function () {
+            var base = document.createElement('base');
+            base.href = new URL('./', window.location.href).href;
+            document.head.insertBefore(base, document.head.firstChild);
+        })();
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -153,7 +160,7 @@
             </div>
         </div>
     </main>
-    <main id="resume" class="container">
+    <main id="resume" class="container hidden">
         <div class="resume-container">
             <img class="pic3 resume-image viewable-photo" src="assets/resume.png" alt="Jam Piodos resume" id="resume-image" role="button" tabindex="0">
             <p class="resume-hint">Click on the resume to zoom and read. Use Print while viewing.</p>
